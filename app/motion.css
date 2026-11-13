@@ -1,0 +1,271 @@
+/* =========================================================
+   Motion — entrances, feedback, transitions.
+   Everything here is decoration: the interface works identically
+   with motion disabled (see the reduced-motion block at the end).
+   ========================================================= */
+
+:root {
+  --ease-out: cubic-bezier(0.22, 0.8, 0.32, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.975) translateY(10px);
+  }
+}
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+@keyframes rail-grow {
+  from {
+    transform: translateY(-50%) scaleY(0);
+  }
+}
+@keyframes check-pop {
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+/* ---------- view entrance ----------
+   The .view element is keyed by view id in AppShell, so switching
+   section remounts it and replays this staggered entrance. */
+
+.view > * {
+  animation: rise 0.44s var(--ease-out) both;
+}
+.view > *:nth-child(1) {
+  animation-delay: 0.02s;
+}
+.view > *:nth-child(2) {
+  animation-delay: 0.07s;
+}
+.view > *:nth-child(3) {
+  animation-delay: 0.12s;
+}
+.view > *:nth-child(4) {
+  animation-delay: 0.17s;
+}
+.view > *:nth-child(n + 5) {
+  animation-delay: 0.22s;
+}
+
+/* Stat tiles inside a grid cascade left to right. */
+.view .grid-4 > *,
+.view .grid-3 > *,
+.view .grid-2 > * {
+  animation: rise 0.4s var(--ease-out) both;
+}
+.view .grid-4 > *:nth-child(2),
+.view .grid-3 > *:nth-child(2),
+.view .grid-2 > *:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.view .grid-4 > *:nth-child(3),
+.view .grid-3 > *:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.view .grid-4 > *:nth-child(4) {
+  animation-delay: 0.15s;
+}
+
+/* Expense categories cascade as they come into view. */
+.cat {
+  animation: rise 0.36s var(--ease-out) both;
+}
+.cat:nth-child(2) {
+  animation-delay: 0.04s;
+}
+.cat:nth-child(3) {
+  animation-delay: 0.08s;
+}
+.cat:nth-child(4) {
+  animation-delay: 0.12s;
+}
+.cat:nth-child(n + 5) {
+  animation-delay: 0.16s;
+}
+
+/* Scenario table rows. */
+.tbl tbody tr {
+  animation: fade-in 0.4s var(--ease-out) both;
+}
+.tbl tbody tr:nth-child(2) {
+  animation-delay: 0.03s;
+}
+.tbl tbody tr:nth-child(3) {
+  animation-delay: 0.06s;
+}
+.tbl tbody tr:nth-child(4) {
+  animation-delay: 0.09s;
+}
+.tbl tbody tr:nth-child(5) {
+  animation-delay: 0.12s;
+}
+.tbl tbody tr:nth-child(n + 6) {
+  animation-delay: 0.15s;
+}
+
+/* The topbar title changes with the view. */
+.topbar .crumb,
+.topbar h1 {
+  animation: fade-in 0.3s ease both;
+}
+
+/* ---------- interaction feedback ---------- */
+
+.btn,
+.nav-item,
+.card,
+.stat,
+.chip,
+.input,
+.segmented button,
+.check input,
+.ex-section,
+.ex-check .box {
+  transition:
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease,
+    box-shadow 0.2s ease,
+    transform 0.16s var(--ease-out),
+    opacity 0.16s ease;
+}
+
+button:not(:disabled):active {
+  transform: scale(0.975);
+}
+.check:active,
+.nav-item:active {
+  transform: none;
+}
+
+.card:hover,
+.stat:hover {
+  border-color: var(--line-strong);
+}
+.stat:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    var(--lift),
+    0 10px 28px rgba(0, 0, 0, 0.3);
+}
+.btn.primary:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+/* Sidebar */
+.nav-item svg {
+  transition: transform 0.2s var(--ease-out);
+}
+.nav-item:hover svg {
+  transform: translateX(2px);
+}
+.nav-item.active svg {
+  transform: scale(1.08);
+}
+.nav-item.active::before {
+  animation: rail-grow 0.26s var(--ease-spring) both;
+}
+.brand-mark {
+  transition: transform 0.25s var(--ease-spring);
+}
+.sidebar:hover .brand-mark {
+  transform: rotate(-4deg) scale(1.05);
+}
+
+/* Checkboxes */
+.check input:checked::after {
+  animation: check-pop 0.3s var(--ease-spring);
+}
+.ex-check input:checked + .box svg {
+  animation: check-pop 0.3s var(--ease-spring);
+}
+
+/* Bars and meters already transition their width in globals.css;
+   these give them a touch more character on first paint. */
+.alloc > i {
+  animation: fade-in 0.5s ease both;
+}
+
+/* ---------- mobile drawer ---------- */
+
+.scrim {
+  animation: fade-in 0.18s ease;
+}
+
+/* ---------- export modal ---------- */
+
+.ex-backdrop {
+  animation: fade-in 0.16s ease;
+}
+.ex-modal {
+  animation: pop-in 0.26s var(--ease-out) both;
+}
+.sheet {
+  animation: rise 0.4s var(--ease-out) both;
+}
+.sheet:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.sheet:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.sheet:nth-child(n + 4) {
+  animation-delay: 0.14s;
+}
+.ex-options > * {
+  animation: slide-right 0.34s var(--ease-out) both;
+}
+.ex-options > *:nth-child(2) {
+  animation-delay: 0.04s;
+}
+.ex-options > *:nth-child(3) {
+  animation-delay: 0.08s;
+}
+.ex-options > *:nth-child(4) {
+  animation-delay: 0.12s;
+}
+
+/* ---------- respect the system preference ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Motion is decoration — never let it hide content when printing. */
+@media print {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
